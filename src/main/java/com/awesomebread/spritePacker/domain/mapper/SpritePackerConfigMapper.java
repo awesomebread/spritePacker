@@ -44,6 +44,24 @@ public class SpritePackerConfigMapper {
 			configBuilder.spriteHeight(Integer.parseInt(cmd.getOptionValue("y")));
 		}
 		
+		configBuilder.crop(cmd.hasOption("cr") || cmd.hasOption("crop"));
+		
+		if (cmd.hasOption("csx") || cmd.hasOption("cropStartX")) {
+			configBuilder.cropStartX(Integer.parseInt(cmd.getOptionValue("csx")));
+		}
+		
+		if (cmd.hasOption("csy") || cmd.hasOption("cropStartY")) {
+			configBuilder.cropStartY(Integer.parseInt(cmd.getOptionValue("csy")));
+		}
+		
+		if (cmd.hasOption("cex") || cmd.hasOption("cropEndX")) {
+			configBuilder.cropEndX(Integer.parseInt(cmd.getOptionValue("cex")));
+		}
+		
+		if (cmd.hasOption("cey") || cmd.hasOption("cropEndY")) {
+			configBuilder.cropEndY(Integer.parseInt(cmd.getOptionValue("cey")));
+		}
+		
 		return configBuilder.build();
 	}
 	

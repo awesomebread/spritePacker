@@ -122,6 +122,34 @@ public class SpritePackerApp implements CommandLineRunner{
 				.hasArg()
 				.desc("The maximum height of the individual sprites in pixels. Default is first selected sprites height.")
 				.build();
+		Option crop = Option.builder("cr")
+				.longOpt("crop")
+				.desc("Will crop images to the smallest non transparent rectangle.  Based on the first image's bounds.")
+				.build();
+		
+		Option cropStartX = Option.builder("csx")
+				.longOpt("cropStartX")
+				.hasArg()
+				.desc("Upper left X coordinate for cropping. Use with -c option to override automatic cropping regions.")
+				.build();
+		
+		Option cropStartY = Option.builder("csy")
+				.longOpt("cropStartY")
+				.hasArg()
+				.desc("Upper left Y coordinate for cropping. Use with -c option to override automatic cropping regions.")
+				.build();
+		
+		Option cropEndX = Option.builder("cex")
+				.longOpt("cropEndX")
+				.hasArg()
+				.desc("Lower right X coordinate for cropping. Use with -c option to override automatic cropping regions.")
+				.build();
+		
+		Option cropEndY = Option.builder("cey")
+				.longOpt("cropEndY")
+				.hasArg()
+				.desc("Lower right Y coordinate for cropping. Use with -c option to override automatic cropping regions.")
+				.build();
 		
 		options.addOption(help);
 		options.addOption(col);
@@ -131,6 +159,11 @@ public class SpritePackerApp implements CommandLineRunner{
 		options.addOption(padding);
 		options.addOption(spriteWidth);
 		options.addOption(spriteHeight);
+		options.addOption(crop);
+		options.addOption(cropStartX);
+		options.addOption(cropStartY);
+		options.addOption(cropEndX);
+		options.addOption(cropEndY);
 		
 		return options;
 	}

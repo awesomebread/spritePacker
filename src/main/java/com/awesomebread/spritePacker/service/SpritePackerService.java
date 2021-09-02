@@ -27,14 +27,64 @@ public class SpritePackerService {
 		
 		log.info("Found " + spritesToPack.size() + " sprites to pack.");
 		
+		BufferedImage image = ImageIO.read(new File(config.getInput().getAbsolutePath() + "\\" + spritesToPack.get(0)));
+		
 		if (config.getSpriteWidth() == null) {
-			BufferedImage image = ImageIO.read(new File(config.getInput().getAbsolutePath() + "\\" + spritesToPack.get(0)));
 			config.setSpriteWidth(image.getWidth());
 		}
 		
 		if (config.getSpriteHeight() == null) {
-			BufferedImage image = ImageIO.read(new File(config.getInput().getAbsolutePath() + "\\" + spritesToPack.get(0)));
 			config.setSpriteHeight(image.getHeight());
+		}
+		
+		Integer cropStartX = null;
+		Integer cropStartY = null;
+		Integer cropEndX = null;
+		Integer cropEndY = null;
+		
+		if (config.isCrop()) {
+			for (int i = 0; i < image.getWidth(); i++) {
+				for (int j = 0; j < image.getHeight(); j++) {
+					if ((image.getRGB(i, j)>>24) != 0x00) {
+						if (cropStartY == null || j < cropStartY) {
+							cropStartY = j;
+						}
+						if (cropEndY == null || j > cropEndY) {
+							cropEndY = j;
+						}
+						if (cropStartX == null || i < cropStartX) {
+							cropStartX = i;
+						}
+						if (cropEndX == null || i > cropEndX) {
+							cropEndX = i;
+						}
+					}
+				}
+			}
+			
+			if (config.getCropStartX() != null) {
+				cropStartX = config.getCropStartX();
+			}
+			
+			if (config.getCropStartY() != null) {
+				cropStartY = config.getCropStartY();
+			}
+			
+			if (config.getCropEndX() != null) {
+				cropEndX = config.getCropEndX();
+			}
+			
+			if (config.getCropEndY() != null) {
+				cropEndY = config.getCropEndY();
+			}
+			
+			int cropWidth = cropEndX - cropStartX;
+			int cropHeight = cropEndY - cropStartY;
+			
+			log.info("Images set to be croped from {}x{} to {}x{} starting at ({}, {}) and ending at ({},{}).",  config.getSpriteWidth(), config.getSpriteHeight(), cropWidth, cropHeight, cropStartX, cropStartY, cropEndX, cropEndY);
+			
+			config.setSpriteWidth(cropWidth);
+			config.setSpriteHeight(cropHeight);
 		}
 		
 		if (config.getRows() == null) {
@@ -54,6 +104,10 @@ public class SpritePackerService {
 		
 		for (String spriteName : spritesToPack) {
 			BufferedImage sprite = ImageIO.read(new File(config.getInput().getAbsolutePath() + "\\" + spriteName));
+			
+			if (config.isCrop()) {
+				sprite = sprite.getSubimage(cropStartX, cropStartY, config.getSpriteWidth(), config.getSpriteHeight());
+			}
 			
 			graphics.drawImage(sprite, currentXLoc, currentYLoc, null);
 			

@@ -31,4 +31,14 @@ public class SpritePackerConfig {
 	
 	private Integer spriteHeight;
 	
+	private boolean crop;
+	
+	private Integer cropStartX;
+	
+	private Integer cropStartY;
+	
+	private Integer cropEndX;
+	
+	private Integer cropEndY;
+	
 }
